@@ -1,5 +1,5 @@
 package org.serratec.trabalhoPOO.modelos;
 
-public class Classe2 {
+public class FolhaPagamento {
 
 }
