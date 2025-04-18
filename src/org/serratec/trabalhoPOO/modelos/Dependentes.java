@@ -7,6 +7,8 @@ public class Dependentes extends Pessoa {
 	
 	public Dependentes(String nome, String cpf, LocalDate dataNascimento, Parentesco parentesco) {
 		super(nome, cpf, dataNascimento);
-		this.parentesco = parentesco;
+		if (dataNascimento.plusYears(18).isAfter(LocalDate.now())); {
+			this.parentesco = parentesco;
+		}
 	}
 }
