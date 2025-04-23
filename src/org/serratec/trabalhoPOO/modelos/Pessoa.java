@@ -19,11 +19,4 @@ public abstract class Pessoa {
     	return cpf; }
     public LocalDate getDataNascimento() { 
     	return dataNascimento; }
-    
-public boolean cpfRepetido(String cpf) {
-	for(Pessoa p :pessoa)
-		if (p.cpf == this.cpf) {
-		return true;
-		}
-return false;
 }
