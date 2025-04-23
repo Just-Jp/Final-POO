@@ -1,5 +1,6 @@
 package org.serratec.trabalhoPOO.modelos;
 
+
 import java.time.LocalDate;
 
 public class FolhaPagamento {
@@ -10,7 +11,7 @@ public class FolhaPagamento {
 	private double descontoIR;
 	private double salarioLiquido;
 	private static int sequencia = 1;
-	
+
 	public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoINSS,
 			double descontoIR, double salarioLiquido) {
 		super();
@@ -21,10 +22,7 @@ public class FolhaPagamento {
 		this.descontoIR = descontoIR;
 		this.salarioLiquido = salarioLiquido;
 	}
-	
-
-	
-	}
 
 
-	
+
+}
