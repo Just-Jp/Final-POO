@@ -1,34 +1,81 @@
-package org.serratec.trabalhoPOO.modelos;
+package modelos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.serratec.trabalhoPOO.enums.Parentesco;
-import org.serratec.trabalhoPOO.excecao.DependenteException;
+import calculos.CalculoSalarioService;
+import exception.DependenteException;
+import interfaces.CalculadorSalario;
 
-public class Dependente extends Pessoa {
+public class Funcionario extends Pessoa implements CalculadorSalario {
 
- private Parentesco parentesco;
+    private double salarioBruto;
+    private List<Dependente> dependentes;
 
- public Dependente(String nome, String cpf, LocalDate dataNascimento, Parentesco parentesco) throws DependenteException {
- super(nome, cpf, dataNascimento);
+    public Funcionario(String nome, String cpf, LocalDate dataNascimento, double salarioBruto) {
+        super(nome, cpf, dataNascimento);
+        if (salarioBruto < 0) {
+            throw new IllegalArgumentException("Salário bruto não pode ser negativo.");
+        }
+        this.salarioBruto = salarioBruto;
+        this.dependentes = new ArrayList<>();
+    }
 
- if (nome == null || nome.trim().isEmpty() || cpf == null || cpf.trim().isEmpty()) {
- throw new IllegalArgumentException("Nome e CPF não podem ser nulos ou vazios.");
- }
+    public double getSalarioBruto() {
+        return salarioBruto;
+    }
 
- if (calcularIdade(dataNascimento) >= 18) {
- throw new DependenteException("Dependente deve ser menor que 18 anos.");
- }
+    public List<Dependente> getDependentes() {
+        return dependentes;
+    }
 
- this.parentesco = parentesco;
- }
+    public int getNumDependentes() {
+        return dependentes.size();
+    }
 
- private int calcularIdade(LocalDate dataNascimento) {
- LocalDate hoje = LocalDate.now();
- return hoje.getYear() - dataNascimento.getYear();
- }
+    @Override
+    public double calcularINSS(double salarioBruto) {
+        return CalculoSalarioService.calcularINSS(salarioBruto);
+    }
 
- public Parentesco getParentesco() {
- return parentesco;
- }
+    @Override
+    public double calcularIR(double salarioBruto, int numDependentes) {
+        double descontoINSS = CalculoSalarioService.calcularINSS(salarioBruto);
+        return CalculoSalarioService.calcularIR(salarioBruto, descontoINSS, numDependentes);
+    }
+
+    public double calcularSalarioLiquido() {
+        double descontoINSS = CalculoSalarioService.calcularINSS(salarioBruto);
+        double descontoIR = CalculoSalarioService.calcularIR(salarioBruto, descontoINSS, getNumDependentes());
+        return salarioBruto - descontoINSS - descontoIR;
+    }
+
+    public void adicionarDependente(Dependente dependente) throws DependenteException {
+        validarDependente(dependente);
+        dependentes.add(dependente);
+    }
+
+    private void validarDependente(Dependente dependente) throws DependenteException {
+        if (calcularIdade(dependente.getDataNascimento()) >= 18) {
+            throw new DependenteException("Dependente deve ser menor que 18 anos.");
+        }
+        if (temCpfRepetido(dependente.getCpf())) {
+            throw new DependenteException("Não pode existir dependentes com o mesmo CPF.");
+        }
+    }
+
+    private static int calcularIdade(LocalDate dataNascimento) {
+        LocalDate hoje = LocalDate.now();
+        return hoje.getYear() - dataNascimento.getYear();
+    }
+
+    private boolean temCpfRepetido(String cpf) {
+        for (Dependente dependente : dependentes) {
+            if (dependente.getCpf().equals(cpf)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
