@@ -12,11 +12,16 @@ public abstract class Pessoa {
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
     }
-    
+
     public String getNome() {
-    	return nome; }
-    public String getCpf() { 
-    	return cpf; }
-    public LocalDate getDataNascimento() { 
-    	return dataNascimento; }
+        return nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
 }

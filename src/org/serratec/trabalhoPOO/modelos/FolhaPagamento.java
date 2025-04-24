@@ -1,28 +1,47 @@
-package org.serratec.trabalhoPOO.modelos;
-
+package modelos;
 
 import java.time.LocalDate;
 
+import calculos.CalculoSalarioService;
+
 public class FolhaPagamento {
-	private int codigo;
-	private Funcionario funcionario;
-	private LocalDate dataPagamento;
-	private double descontoINSS;
-	private double descontoIR;
-	private double salarioLiquido;
-	private static int sequencia = 1;
+    private int codigo;
+    private Funcionario funcionario;
+    private LocalDate dataPagamento;
+    private double descontoINSS;
+    private double descontoIR;
+    private double salarioLiquido;
 
-	public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoINSS,
-			double descontoIR, double salarioLiquido) {
-		super();
-		this.codigo = sequencia++;
-		this.funcionario = funcionario;
-		this.dataPagamento = LocalDate.now();
-		this.descontoINSS = descontoINSS;
-		this.descontoIR = descontoIR;
-		this.salarioLiquido = salarioLiquido;
-	}
+    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento) {
+        this.codigo = codigo;
+        this.funcionario = funcionario;
+        this.dataPagamento = dataPagamento;
+        this.descontoINSS = CalculoSalarioService.calcularINSS(funcionario.getSalarioBruto());
+        this.descontoIR = CalculoSalarioService.calcularIR(funcionario.getSalarioBruto(), this.descontoINSS, funcionario.getNumDependentes());
+        this.salarioLiquido = funcionario.calcularSalarioLiquido();
+    }
 
+    public int getCodigo() {
+        return codigo;
+    }
 
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
 
+    public LocalDate getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public double getDescontoINSS() {
+        return descontoINSS;
+    }
+
+    public double getDescontoIR() {
+        return descontoIR;
+    }
+
+    public double getSalarioLiquido() {
+        return salarioLiquido;
+    }
 }
