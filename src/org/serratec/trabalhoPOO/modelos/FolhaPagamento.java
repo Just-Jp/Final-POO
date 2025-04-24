@@ -1,8 +1,9 @@
-package modelos;
+package org.serratec.trabalhoPOO.modelos;
 
 import java.time.LocalDate;
 
-import calculos.CalculoSalario;
+import org.serratec.trabalhoPOO.calculos.CalculadoraIR;
+import org.serratec.trabalhoPOO.calculos.CalculadoraINSS;
 
 public class FolhaPagamento {
     private int codigo;
@@ -16,8 +17,8 @@ public class FolhaPagamento {
         this.codigo = codigo;
         this.funcionario = funcionario;
         this.dataPagamento = dataPagamento;
-        this.descontoINSS = CalculoSalario.calcularINSS(funcionario.getSalarioBruto());
-        this.descontoIR = CalculoSalario.calcularIR(funcionario.getSalarioBruto(), this.descontoINSS, funcionario.getNumDependentes());
+        this.descontoINSS = CalculadoraINSS.calcular(funcionario.getSalarioBruto());
+        this.descontoIR = CalculadoraIR.calcular(funcionario.getSalarioBruto(), this.descontoINSS, funcionario.getNumDependentes());
         this.salarioLiquido = funcionario.calcularSalarioLiquido();
     }
 

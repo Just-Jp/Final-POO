@@ -1,8 +1,8 @@
-package calculos;
+package org.serratec.trabalhoPOO.calculos;
 
-    import java.util.Locale;
+import java.util.Locale;
 
-    public class calcularINSS {
+    public class CalculadoraINSS {
 
         public static double calcular(double salario) {
             if (salario <= 0) {
@@ -18,9 +18,7 @@ package calculos;
                 inss = (salario * 0.12) - 106.60;
             } else if (salario <= 8157.41) {
                 inss = (salario * 0.14) - 190.42;
-            } else {
-                inss = (8157.41 * 0.14);
-            }
+            } else inss = 951.62; 
 
             return Double.parseDouble(String.format(Locale.US, "%.2f", inss));
         }

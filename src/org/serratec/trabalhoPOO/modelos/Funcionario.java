@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.serratec.trabalhoPOO.calculos.CalculadoraINSS;
+import org.serratec.trabalhoPOO.calculos.CalculadoraIR;
+import org.serratec.trabalhoPOO.calculos.CalculadoraSalario;
 import org.serratec.trabalhoPOO.excecao.DependenteException;
 import org.serratec.trabalhoPOO.interfaces.CalculadorSalario;
 
@@ -37,18 +40,18 @@ public class Funcionario extends Pessoa implements CalculadorSalario {
 
     @Override
     public double calcularINSS(double salarioBruto) {
-        return CalculoSalario.calcularINSS(salarioBruto);
+        return CalculadoraINSS.calcular(salarioBruto);
     }
 
     @Override
     public double calcularIR(double salarioBruto, int numDependentes) {
-        double descontoINSS = CalculoSalario.calcularINSS(salarioBruto);
-        return CalculoSalario.calcularIR(salarioBruto, descontoINSS, numDependentes);
+        double descontoINSS = CalculadoraINSS.calcular(salarioBruto);
+        return CalculadoraIR.calcular(salarioBruto, descontoINSS, numDependentes);
     }
 
     public double calcularSalarioLiquido() {
-        double descontoINSS = CalculoSalario.calcularINSS(salarioBruto);
-        double descontoIR = CalculoSalario.calcularIR(salarioBruto, descontoINSS, getNumDependentes());
+        double descontoINSS = CalculadoraINSS.calcular(salarioBruto);
+        double descontoIR = CalculadoraIR.calcular(salarioBruto, descontoINSS, getNumDependentes());
         return salarioBruto - descontoINSS - descontoIR;
     }
 
