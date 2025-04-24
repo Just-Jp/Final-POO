@@ -15,17 +15,56 @@ import org.serratec.trabalhoPOO.modelos.Funcionario;
 
 public class LeitorArquivo {
 
-	public static void LeitorCSV() {
+	private static final String CAMINHO_PADRAO = ".\\src\\entrada_arquivos.txt";
 
-		String path = ".\\src\\entrada_arquivos.txt";
+	public static List<Funcionario> lerArquivo() {
+		return lerArquivo(CAMINHO_PADRAO);
+	}
 
-		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+	public static List<Funcionario> lerArquivo(String caminhoArquivo) {
+		List<Funcionario> funcionarios = new ArrayList<>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+		try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
 			String linha;
+			Funcionario funcionarioAtual = null;
+
 			while ((linha = br.readLine()) != null) {
-				System.out.println(linha);
+				linha = linha.trim();
+				if (linha.isEmpty()) {
+					funcionarioAtual = null;
+					continue;
+				}
+
+				String[] partes = linha.split(";");
+				if (partes.length == 4 && funcionarioAtual == null) {
+					String nome = partes[0];
+					String cpf = partes[1];
+					LocalDate nascimento = LocalDate.parse(partes[2], formatter);
+					double salario = Double.parseDouble(partes[3]);
+
+					funcionarioAtual = new Funcionario(nome, cpf, nascimento, salario);
+					funcionarios.add(funcionarioAtual);
+
+				} else if (partes.length == 4 && funcionarioAtual != null) {
+					String nome = partes[0];
+					String cpf = partes[1];
+					LocalDate nascimento = LocalDate.parse(partes[2], formatter);
+					Parentesco parentesco = Parentesco.valueOf(partes[3].toUpperCase());
+
+					try {
+						Dependente dependente = new Dependente(nome, cpf, nascimento, parentesco);
+						funcionarioAtual.adicionarDependente(dependente);
+					} catch (DependenteException e) {
+						System.err.println("Erro ao adicionar dependente: " + e.getMessage());
+					}
+				}
 			}
+
 		} catch (IOException e) {
-			System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+			System.err.println("Erro ao ler o arquivo: " + e.getMessage());
 		}
+
+		return funcionarios;
 	}
 }

@@ -17,33 +17,16 @@ import org.serratec.trabalhoPOO.modelos.Funcionario;
 public class Principal {
 
     public static void main(String[] args) {
-    	LeitorArquivo.LeitorCSV();
-    	Locale.setDefault(Locale.US);
-        Scanner scanner = new Scanner(System.in);
-        List<Funcionario> funcionarios = inicializarFuncionarios(); // Inicialização
-        processarEntradaDeFuncionarios(scanner, funcionarios); // Entrada de dados
-        gerarESalvarFolhaPagamento(scanner, funcionarios); // Geração e saída
-        scanner.close();
-    }
-    
+    	   Locale.setDefault(Locale.US);
+           Scanner scanner = new Scanner(System.in);
 
+           List<Funcionario> funcionarios = LeitorArquivo.lerArquivo(); 
 
-	private static List<Funcionario> inicializarFuncionarios() {
-        List<Funcionario> funcionarios = new ArrayList<>();
-        try {
-            Funcionario funcionario1 = new Funcionario("Daniel Lopes", "12345678901", LocalDate.of(2015, 5, 20), 5000.00);
-            funcionario1.adicionarDependente(new Dependente("João Pedro", "02345678902", LocalDate.of(2015, 10, 15), Parentesco.FILHO));
-            funcionario1.adicionarDependente(new Dependente("Iara", "03345678903", LocalDate.of(2009, 3, 22), Parentesco.FILHO));
-            funcionarios.add(funcionario1);
+           processarEntradaDeFuncionarios(scanner, funcionarios);
 
-            Funcionario funcionario2 = new Funcionario("Cauã pacheco", "23456789012", LocalDate.of(1990, 12, 10), 8000.00);
-            funcionario2.adicionarDependente(new Dependente("Karen ", "13456789013", LocalDate.of(2010, 8, 1), Parentesco.SOBRINHO));
-            funcionarios.add(funcionario2);
+           gerarESalvarFolhaPagamento(scanner, funcionarios);
 
-        } catch (DependenteException e) {
-            System.err.println("Erro ao inicializar funcionário: " + e.getMessage());
-        }
-        return funcionarios;
+           scanner.close();
     }
 
     private static void processarEntradaDeFuncionarios(Scanner scanner, List<Funcionario> funcionarios) {
