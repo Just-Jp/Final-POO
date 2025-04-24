@@ -17,15 +17,18 @@ import org.serratec.trabalhoPOO.modelos.Funcionario;
 public class Principal {
 
     public static void main(String[] args) {
-        Locale.setDefault(Locale.US);
+    	LeitorArquivo.LeitorCSV();
+    	Locale.setDefault(Locale.US);
         Scanner scanner = new Scanner(System.in);
         List<Funcionario> funcionarios = inicializarFuncionarios(); // Inicialização
         processarEntradaDeFuncionarios(scanner, funcionarios); // Entrada de dados
         gerarESalvarFolhaPagamento(scanner, funcionarios); // Geração e saída
         scanner.close();
     }
+    
 
-    private static List<Funcionario> inicializarFuncionarios() {
+
+	private static List<Funcionario> inicializarFuncionarios() {
         List<Funcionario> funcionarios = new ArrayList<>();
         try {
             Funcionario funcionario1 = new Funcionario("Daniel Lopes", "12345678901", LocalDate.of(2015, 5, 20), 5000.00);
