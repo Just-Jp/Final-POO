@@ -4,79 +4,63 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.serratec.trabalhoPOO.excecao.DependenteException;
+import org.serratec.trabalhoPOO.calculos.CalculadoraINSS;
+import org.serratec.trabalhoPOO.calculos.CalculadoraIR;
 import org.serratec.trabalhoPOO.interfaces.CalculadorSalario;
 
-
-
 public class Funcionario extends Pessoa implements CalculadorSalario {
+	private double salarioBruto;
+	private List<Dependente> dependentes;
+	private int numDependentes;
 
-    private double salarioBruto;
-    private List<Dependente> dependentes;
+	public Funcionario(String nome, String cpf, LocalDate dataNascimento, double salarioBruto) {
+		super(nome, cpf, dataNascimento);
+		if (salarioBruto < 0) {
+			 throw new IllegalArgumentException("Salário bruto não pode ser negativo.");
+		}
+		this.salarioBruto = salarioBruto;
+		this.dependentes = new ArrayList<>();
+		this.numDependentes = 0;
+	}
 
-    public Funcionario(String nome, String cpf, LocalDate dataNascimento, double salarioBruto) {
-        super(nome, cpf, dataNascimento);
-        if (salarioBruto < 0) {
-            throw new IllegalArgumentException("Salário bruto não pode ser negativo.");
-        }
-        this.salarioBruto = salarioBruto;
-        this.dependentes = new ArrayList<>();
-    }
+	public double getSalarioBruto() {
+		return salarioBruto;
+	}
 
-    public double getSalarioBruto() {
-        return salarioBruto;
-    }
+	public int getNumDependentes() {
+		return numDependentes;
+	}
 
-    public List<Dependente> getDependentes() {
-        return dependentes;
-    }
+	public List<Dependente> getDependentes() {
+		return dependentes;
+	}
 
-    public int getNumDependentes() {
-        return dependentes.size();
-    }
+	@Override
+	public double calcularINSS(double salarioBruto) {
 
-    @Override
-    public double calcularINSS(double salarioBruto) {
-        return CalculoSalarioService.calcularINSS(salarioBruto);
-    }
+		return CalculadoraINSS.calcular(salarioBruto);
+	}
 
-    @Override
-    public double calcularIR(double salarioBruto, int numDependentes) {
-        double descontoINSS = CalculoSalarioService.calcularINSS(salarioBruto);
-        return CalculoSalarioService.calcularIR(salarioBruto, descontoINSS, numDependentes);
-    }
+	@Override
+	public double calcularIR(double salarioBruto, int numDependentes) {
 
-    public double calcularSalarioLiquido() {
-        double descontoINSS = CalculoSalarioService.calcularINSS(salarioBruto);
-        double descontoIR = CalculoSalarioService.calcularIR(salarioBruto, descontoINSS, getNumDependentes());
-        return salarioBruto - descontoINSS - descontoIR;
-    }
+		double descontoINSS = CalculadoraINSS.calcular(salarioBruto);
+		return CalculadoraIR.calcular(salarioBruto, descontoINSS, numDependentes);
+	}
 
-    public void adicionarDependente(Dependente dependente) throws DependenteException {
-        validarDependente(dependente);
-        dependentes.add(dependente);
-    }
+	
 
-    private void validarDependente(Dependente dependente) throws DependenteException {
-        if (calcularIdade(dependente.getDataNascimento()) >= 18) {
-            throw new DependenteException("Dependente deve ser menor que 18 anos.");
-        }
-        if (temCpfRepetido(dependente.getCpf())) {
-            throw new DependenteException("Não pode existir dependentes com o mesmo CPF.");
-        }
-    }
+	public int calcularIdade(LocalDate dataNascimento) {
+		LocalDate hoje = LocalDate.now();
+		return hoje.getYear() - dataNascimento.getYear();
 
-    private static int calcularIdade(LocalDate dataNascimento) {
-        LocalDate hoje = LocalDate.now();
-        return hoje.getYear() - dataNascimento.getYear();
-    }
+	}
+	public boolean cpfRepetido(String cpf) {
+		for(Dependente d : dependentes)
+			if (d.getCpf().equals(cpf)) {
+				return true;
+			}
+		return false;
+	}
 
-    private boolean temCpfRepetido(String cpf) {
-        for (Dependente dependente : dependentes) {
-            if (dependente.getCpf().equals(cpf)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
