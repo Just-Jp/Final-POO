@@ -14,8 +14,24 @@ import org.serratec.trabalhoPOO.modelos.Dependente;
 import org.serratec.trabalhoPOO.modelos.Funcionario;
 
     public class LeitorArquivo {
+    	
+    	public static void main(String[] args) {
+			
+    	
+    	String path = ".\\src\\entrada_arquivos.txt";
 
-        public static List<Funcionario> lerArquivoDeEntrada(String nomeArquivo) throws IOException, DependenteException {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                System.out.println(linha);
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+        }
+    	}
+    }
+
+       /* public static List<Funcionario> lerArquivoDeEntrada(String nomeArquivo) throws IOException, DependenteException {
             List<Funcionario> funcionarios = new ArrayList<>();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -60,5 +76,5 @@ import org.serratec.trabalhoPOO.modelos.Funcionario;
                 }
             }
             return true;
-        }
-    }
+        }*/
+    
