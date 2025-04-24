@@ -1,22 +1,27 @@
-package org.serratec.trabalhoPOO.calculos;
+package calculos;
 
-public class CalculadoraINSS {
+    import java.util.Locale;
 
-    static public double calcular(double salario) {
-        if (salario <= 0) {
-           // throw new IllegalArgumentException("Salário deve ser maior que zero.");
-        }
+    public class calcularINSS {
 
-        if (salario <= 1412.00) {
-            return salario * 0.075;
-        } else if (salario <= 2666.68) {
-            return salario * 0.09;
-        } else if (salario <= 4000.03) {
-            return salario * 0.12;
-        } else if (salario <= 7786.02) {
-            return salario * 0.14;
-        } else {
-            return 7786.02 * 0.14;
+        public static double calcular(double salario) {
+            if (salario <= 0) {
+                throw new IllegalArgumentException("Salário deve ser maior que zero.");
+            }
+
+            double inss;
+            if (salario <= 1518.00) {
+                inss = salario * 0.075;
+            } else if (salario <= 2793.88) {
+                inss = (salario * 0.09) - 22.77;
+            } else if (salario <= 4190.83) {
+                inss = (salario * 0.12) - 106.60;
+            } else if (salario <= 8157.41) {
+                inss = (salario * 0.14) - 190.42;
+            } else {
+                inss = (8157.41 * 0.14);
+            }
+
+            return Double.parseDouble(String.format(Locale.US, "%.2f", inss));
         }
     }
-}
